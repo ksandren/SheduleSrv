@@ -6,7 +6,7 @@ if [[ $EUID -ne 0 ]]; then
 fi
 declare -a oldUpdates=`ls installed-updates -r`
 
-for update in "${oldUpdates[@]}"
+for update in ${oldUpdates[@]}
 do
     echo "откат $update"
     "./installed-updates/$update/undo.sh"

@@ -8,9 +8,9 @@ mkdir -p installed-updates
 declare -a newUpdates=`ls updates`
 declare -a oldUpdates=`ls installed-updates`
 
-for update in "${newUpdates[@]}"
+for update in ${newUpdates[@]}
 do
-    if [[ ${oldUpdates[$update]} ]]
+    if [[ "${oldUpdates[@]}" == "*$update*" ]]
     then
         continue
     fi
