@@ -1,10 +1,10 @@
 <VirtualHost *:80>
-    ServerAdmin webmaster@tt.dom
+#    ServerAdmin webmaster@tt.dom
     DocumentRoot "/home/admin/SheduleSrv/http"
-    ServerName domainname1.dom
-    ServerAlias domainname1.dom
-    ErrorLog "/var/log/httpd/tt.dom-error_log"
-    CustomLog "/var/log/httpd/tt.dom-access_log" common
+#    ServerName domainname1.dom
+#    ServerAlias domainname1.dom
+    ErrorLog "/var/log/httpd/SheduleSrv-error_log"
+    CustomLog "/var/log/httpd/SheduleSrv-access_log" common
     WSGIScriptAlias /app /home/admin/SheduleSrv/http/test.py
     <Directory "/home/admin/SheduleSrv/http">
         Options Indexes FollowSymlinks
