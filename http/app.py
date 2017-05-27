@@ -53,8 +53,8 @@ def get_table(table):
 
 def send_shedule_data(environ, request_body_size):
     request_body = environ['wsgi.input'].read(request_body_size).decode('utf-8')
+    mode = re.search(r'mode=(\d+)', request_body)
     try:
-        mode = re.search(r'mode=(\d+)', request_body)
         if(mode != None):
             mode = int(mode.group(1))
     except (ValueError):
@@ -63,7 +63,23 @@ def send_shedule_data(environ, request_body_size):
     if(len(attr) == 0 or mode == None):
         yield b'ERROR'
         return [b'']
-    #c.execute("SELECT  FROM `" + table + "`")
+    c.execute('SELECT `id`, `name` FROM `param` WHERE `mode_id` = ' + str(mode))
+    params = {}
+    for record in c:
+        params[str(record[0])] = str(record[1])
+    fields = '`'
     for it in attr:
-        yield (it[0]+':'+it[1]).encode('utf-8') + b' '
-    return [request_body.encode('utf-8')]
+        fields += params[it[0]] + '`=' + it[1] + ' AND `'
+    fields = fields[:-6]
+    result = ('<table name="mode_' + str(mode) + '_session">').encode('utf-8')
+    c.execute('SELECT * FROM `mode_' + str(mode) + '_session_mirror` WHERE ' + fields)
+    for record in c:
+        s = '<r>'
+        for value in record:
+            s += '<v>' + str(value) + '</v>'
+        result += (s.encode('utf-8') + b'</r>')
+        if len(result) > 16 * 1024:
+           yield result
+           result = b'' 
+    result += b'</table>'
+    yield result
